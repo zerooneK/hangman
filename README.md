@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# แฮงแมน (Hangman)
 
-## Getting Started
+เกมทายคำสำหรับเล่นคนเดียวบนเว็บ ทายทีละตัวอักษร มีคำใบ้เป็นหมวดหมู่ ทายผิดได้ 6 ครั้ง พร้อมรูปคนวาดทีละส่วน
 
-First, run the development server:
+**เล่นได้ที่:** https://hangman-blue-iota.vercel.app
+
+## วิธีเล่น
+
+1. ระบบสุ่มคำภาษาอังกฤษให้ พร้อมโชว์หมวดหมู่เป็นคำใบ้
+2. ทายตัวอักษรโดยกดคีย์บอร์ด หรือกดปุ่มบนหน้าจอ
+3. ทายถูก = เปิดตัวนั้นทุกตำแหน่ง / ทายผิด = เสีย 1 ชีวิต และวาดรูปคนเพิ่ม 1 ส่วน
+4. เปิดครบทุกตัวอักษร = ชนะ / ใช้ชีวิตครบ 6 = แพ้ แล้วกด "เล่นอีกครั้ง" เพื่อเริ่มใหม่
+
+## ฟีเจอร์
+
+- เล่นคนเดียว ไม่ต้องสมัครสมาชิก และไม่เก็บข้อมูลผู้เล่น
+- คำอังกฤษ 100 คำ แบ่ง 5 หมวด หมวดละ 20 คำ: สัตว์, ผลไม้, ประเทศ, สี, อาชีพ
+- รองรับทั้งคีย์บอร์ดและมือถือ (ปุ่มบนจอ + หน้าจอปรับตามขนาด)
+- ภาษาไทย พร้อมการช่วยการเข้าถึง (screen reader, focus ring)
+- กันไม่ให้คำเดิมออกติดกันสองครั้ง
+
+## เทคโนโลยี
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS
+- Vitest สำหรับเทสต์ตรรกะเกม
+- Deploy บน Vercel
+
+## เริ่มพัฒนา
+
+ต้องมี Node.js 22 ขึ้นไป
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+จากนั้นเปิด http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## คำสั่งที่มีให้ใช้
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| คำสั่ง | ทำอะไร |
+| --- | --- |
+| `npm run dev` | รันโหมดพัฒนา |
+| `npm run build` | สร้างเวอร์ชัน production |
+| `npm run start` | รันเวอร์ชัน production |
+| `npm test` | รันเทสต์ทั้งหมด |
+| `npm run typecheck` | ตรวจชนิดข้อมูล TypeScript |
+| `npm run lint` | ตรวจสไตล์โค้ด |
 
-## Learn More
+## เพิ่มหรือแก้คำศัพท์
 
-To learn more about Next.js, take a look at the following resources:
+คำเก็บเป็นไฟล์ JSON แยกตามหมวดในโฟลเดอร์ `words/` เช่น `words/animals.json` แต่ละไฟล์หน้าตาแบบนี้
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```json
+{
+  "category": "สัตว์",
+  "words": ["CAT", "DOG"]
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+เพิ่มคำได้เลย (ตัวพิมพ์เล็ก/ใหญ่ก็ได้ ระบบจะแปลงให้เป็นตัวพิมพ์ใหญ่เอง) ถ้าอยากเพิ่มหมวดใหม่ ให้สร้างไฟล์ JSON แล้ว import เพิ่มใน `lib/word-lists.ts`
 
-## Deploy on Vercel
+## โครงสร้างโปรเจกต์
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/                 หน้าเว็บและ layout
+components/          ชิ้นส่วน UI (รูปคน, ปุ่มตัวอักษร, ตัวเกม)
+lib/game.ts          ตรรกะเกม (pure + มีเทสต์)
+lib/words.ts         การสุ่มเลือกคำ (pure + มีเทสต์)
+lib/word-lists.ts    รวมคำจากไฟล์ JSON
+words/*.json         คำศัพท์แยกหมวด
+test/                เทสต์
+docs/adr/            บันทึกการตัดสินใจ (ADR)
+CONTEXT.md           อภิธานศัพท์ของโปรเจกต์
+CHANGELOG.md         ประวัติเวอร์ชัน
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy
+
+โปรเจกต์นี้ deploy บน Vercel (ชื่อโปรเจกต์ `hangman`) ด้วยคำสั่ง
+
+```bash
+vercel --prod
+```
+
+## เวอร์ชัน
+
+ดูเวอร์ชันปัจจุบันได้ในไฟล์ `VERSION` และดูประวัติการเปลี่ยนแปลงใน `CHANGELOG.md` (ใช้ Semantic Versioning)
