@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.5.1] - 2026-09-13
+
+### Fixed
+
+- The stick figure now derives its part count from the drawing itself, removing a duplicate "6" that could drift from the number of Lives.
+
 ## [0.5.0] - 2026-09-13
 
 ### Added

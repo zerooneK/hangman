@@ -1,5 +1,3 @@
-const DRAWING_PARTS = 6;
-
 const PARTS = [
   <circle key="head" cx="140" cy="65" r="15" />,
   <line key="body" x1="140" y1="80" x2="140" y2="140" />,
@@ -10,8 +8,6 @@ const PARTS = [
 ];
 
 export function HangmanFigure({ wrongGuesses }: { wrongGuesses: number }) {
-  const shown = Math.min(Math.max(wrongGuesses, 0), DRAWING_PARTS);
-
   return (
     <svg
       viewBox="0 0 200 220"
@@ -25,7 +21,7 @@ export function HangmanFigure({ wrongGuesses }: { wrongGuesses: number }) {
       <line x1="50" y1="210" x2="50" y2="20" />
       <line x1="50" y1="20" x2="140" y2="20" />
       <line x1="140" y1="20" x2="140" y2="50" />
-      {PARTS.slice(0, shown)}
+      {PARTS.slice(0, Math.max(wrongGuesses, 0))}
     </svg>
   );
 }
