@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.7.1] - 2026-09-13
+
+### Fixed
+
+- Removed the `overflow-x-hidden` safety net on the page; the layout already wraps, so a real overflow would now be visible instead of silently clipped.
+
 ## [0.7.0] - 2026-09-13
 
 ### Added
