@@ -36,6 +36,7 @@ export function HangmanGame() {
 
   const slots = maskedWord(game).split("");
   const isOver = game.status !== "playing";
+  const spokenWord = slots.map((slot) => (slot === "_" ? "ว่าง" : slot)).join(" ");
 
   return (
     <>
@@ -49,9 +50,14 @@ export function HangmanGame() {
 
       <HangmanFigure wrongGuesses={game.wrongGuesses} />
 
-      <p className="flex flex-wrap justify-center gap-2 font-mono text-3xl tracking-widest text-black sm:gap-3 sm:text-5xl dark:text-zinc-50">
+      <p
+        aria-label={`คำที่ต้องทาย: ${spokenWord}`}
+        className="flex flex-wrap justify-center gap-2 font-mono text-3xl tracking-widest text-black sm:gap-3 sm:text-5xl dark:text-zinc-50"
+      >
         {slots.map((slot, index) => (
-          <span key={index}>{slot}</span>
+          <span key={index} aria-hidden="true">
+            {slot}
+          </span>
         ))}
       </p>
 
@@ -63,7 +69,10 @@ export function HangmanGame() {
 
       {isOver && (
         <div className="flex flex-col items-center gap-4">
-          <p className="text-2xl font-semibold text-black dark:text-zinc-50">
+          <p
+            role="status"
+            className="text-2xl font-semibold text-black dark:text-zinc-50"
+          >
             {game.status === "won" ? "เก่งมาก! คุณชนะ" : "เสียใจด้วย คุณแพ้"}
           </p>
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
@@ -72,7 +81,7 @@ export function HangmanGame() {
           <button
             type="button"
             onClick={() => setGame(newGame(game.word))}
-            className="rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-300"
+            className="rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-zinc-300 dark:focus-visible:outline-white"
           >
             เล่นอีกครั้ง
           </button>

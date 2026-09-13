@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.8.0] - 2026-09-13
+
+### Added
+
+- Thai interface throughout: page title, hint, lives, result, and play-again button, with `<html lang="th">`.
+- Accessibility polish: the stick figure and letter slots expose screen-reader text, the Win/Loss result is announced as a live status, guessed letter buttons are labelled as already guessed, and all interactive elements show a visible focus ring.
+
 ## [0.7.1] - 2026-09-13
 
 ### Fixed

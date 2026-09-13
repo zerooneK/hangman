@@ -8,9 +8,13 @@ const PARTS = [
 ];
 
 export function HangmanFigure({ wrongGuesses }: { wrongGuesses: number }) {
+  const shownParts = Math.min(Math.max(wrongGuesses, 0), PARTS.length);
+
   return (
     <svg
       viewBox="0 0 200 220"
+      role="img"
+      aria-label={`รูปคนทายคำ: ทายผิด ${shownParts} จาก ${PARTS.length} ครั้ง`}
       className="h-48 w-40 text-black sm:h-56 sm:w-48 dark:text-zinc-50"
       fill="none"
       stroke="currentColor"
@@ -21,7 +25,7 @@ export function HangmanFigure({ wrongGuesses }: { wrongGuesses: number }) {
       <line x1="50" y1="210" x2="50" y2="20" />
       <line x1="50" y1="20" x2="140" y2="20" />
       <line x1="140" y1="20" x2="140" y2="50" />
-      {PARTS.slice(0, Math.max(wrongGuesses, 0))}
+      {PARTS.slice(0, shownParts)}
     </svg>
   );
 }
