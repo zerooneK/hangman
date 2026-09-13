@@ -15,6 +15,11 @@
     "SINGER",
     "DANCER",
     "PAINTER",
-    "WRITER"
+    "WRITER",
+    "FIREFIGHTER",
+    "JOURNALIST",
+    "ARCHITECT",
+    "SCIENTIST",
+    "PHARMACIST"
   ]
 }
