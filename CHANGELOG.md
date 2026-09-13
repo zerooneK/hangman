@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] - 2026-09-13
+
+### Added
+
+- Core Game rules as a pure, tested module (`lib/game`): a correct Guess reveals every occurrence, a Wrong Guess costs one Life, a repeated Guess is ignored, and the Game ends in a Win or a Loss after six Wrong Guesses.
+- A playable home page: one slot per letter, keyboard input, remaining Lives, Win/Loss message, Word reveal, and a "play again" button — all client-side with no server storage.
+
 ## [0.3.1] - 2026-09-13
 
 ### Fixed
