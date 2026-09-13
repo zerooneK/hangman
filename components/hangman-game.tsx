@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { HangmanFigure } from "@/components/hangman-figure";
+import { LetterKeyboard } from "@/components/letter-keyboard";
 import {
   MAX_WRONG_GUESSES,
   guess,
@@ -48,11 +49,17 @@ export function HangmanGame() {
 
       <HangmanFigure wrongGuesses={game.wrongGuesses} />
 
-      <p className="flex gap-3 font-mono text-5xl tracking-widest text-black dark:text-zinc-50">
+      <p className="flex flex-wrap justify-center gap-2 font-mono text-3xl tracking-widest text-black sm:gap-3 sm:text-5xl dark:text-zinc-50">
         {slots.map((slot, index) => (
           <span key={index}>{slot}</span>
         ))}
       </p>
+
+      <LetterKeyboard
+        guessed={game.guessed}
+        disabled={isOver}
+        onGuess={(letter) => setGame((current) => guess(current, letter))}
+      />
 
       {isOver && (
         <div className="flex flex-col items-center gap-4">

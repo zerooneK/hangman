@@ -11,7 +11,7 @@ export function HangmanFigure({ wrongGuesses }: { wrongGuesses: number }) {
   return (
     <svg
       viewBox="0 0 200 220"
-      className="h-56 w-48 text-black dark:text-zinc-50"
+      className="h-48 w-40 text-black sm:h-56 sm:w-48 dark:text-zinc-50"
       fill="none"
       stroke="currentColor"
       strokeWidth="4"

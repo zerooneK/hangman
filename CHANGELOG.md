@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.7.0] - 2026-09-13
+
+### Added
+
+- On-screen A–Z letter buttons so the game can be played on a phone or tablet; a letter already guessed is disabled and visually spent.
+- Responsive layout: letter slots wrap, and the figure, keyboard, and padding shrink on narrow screens.
+
 ## [0.6.1] - 2026-09-13
 
 ### Fixed
