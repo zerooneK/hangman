@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] - 2026-09-13
+
+### Added
+
+- Word Lists as one JSON file per Category (animals, fruits, countries, colors), English words only.
+- Pure, tested Word selection (`lib/words`) using injected randomness, which never serves the same Word twice in a row.
+- The Category is shown to the player as a hint.
+- The Game now loads client-side only, keeping the Word random without a server/client mismatch.
+
 ## [0.5.1] - 2026-09-13
 
 ### Fixed
