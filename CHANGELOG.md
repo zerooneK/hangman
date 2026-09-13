@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.6.1] - 2026-09-13
+
+### Fixed
+
+- Word selection now guarantees a different Word even when the chosen Category has no alternative, falling back to another Category.
+- The Category is carried as part of the Game instead of a separate "Round", matching the project glossary.
+
 ## [0.6.0] - 2026-09-13
 
 ### Added

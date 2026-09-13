@@ -27,4 +27,15 @@ describe("picking a Word", () => {
 
     expect(choice.word).toBe("DOG");
   });
+
+  it("falls back to another Category rather than repeat the previous Word", () => {
+    const singleWordLists: WordList[] = [
+      { category: "Animals", words: ["CAT"] },
+      { category: "Fruits", words: ["FIG"] },
+    ];
+
+    const choice = pickWord(singleWordLists, () => 0, "CAT");
+
+    expect(choice).toEqual({ category: "Fruits", word: "FIG" });
+  });
 });

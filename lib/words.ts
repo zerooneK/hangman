@@ -17,8 +17,22 @@ export function pickWord(
 ): WordChoice {
   const list = lists[Math.floor(random() * lists.length)];
   const candidates = list.words.filter((word) => word !== previousWord);
-  const words = candidates.length > 0 ? candidates : list.words;
-  const word = words[Math.floor(random() * words.length)];
+
+  if (candidates.length > 0) {
+    const word = candidates[Math.floor(random() * candidates.length)];
+
+    return { category: list.category, word };
+  }
+
+  const alternatives = lists
+    .flatMap((other) => other.words.map((word) => ({ category: other.category, word })))
+    .filter((choice) => choice.word !== previousWord);
+
+  if (alternatives.length > 0) {
+    return alternatives[Math.floor(random() * alternatives.length)];
+  }
+
+  const word = list.words[Math.floor(random() * list.words.length)];
 
   return { category: list.category, word };
 }

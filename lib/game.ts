@@ -4,13 +4,20 @@ export const MAX_WRONG_GUESSES = 6;
 
 export interface Game {
   readonly word: string;
+  readonly category: string;
   readonly guessed: readonly string[];
   readonly wrongGuesses: number;
   readonly status: GameStatus;
 }
 
-export function startGame(word: string): Game {
-  return { word: word.toUpperCase(), guessed: [], wrongGuesses: 0, status: "playing" };
+export function startGame(word: string, category: string): Game {
+  return {
+    word: word.toUpperCase(),
+    category,
+    guessed: [],
+    wrongGuesses: 0,
+    status: "playing",
+  };
 }
 
 export function maskedWord(game: Game): string {
@@ -38,6 +45,7 @@ export function guess(game: Game, letter: string): Game {
 
   return {
     word: game.word,
+    category: game.category,
     guessed,
     wrongGuesses,
     status: revealed ? "won" : wrongGuesses >= MAX_WRONG_GUESSES ? "lost" : "playing",

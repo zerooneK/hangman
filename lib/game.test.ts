@@ -1,15 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { guess, livesLeft, maskedWord, startGame } from "./game";
 
+const start = (word: string) => startGame(word, "Category");
+
 describe("a new Game", () => {
   it("hides every letter of the Word", () => {
-    const game = startGame("CAT");
+    const game = start("CAT");
 
     expect(maskedWord(game)).toBe("___");
   });
 
   it("normalises the Word so any letter case can be guessed", () => {
-    const game = guess(startGame("cat"), "C");
+    const game = guess(start("cat"), "C");
 
     expect(maskedWord(game)).toBe("C__");
   });
@@ -17,13 +19,13 @@ describe("a new Game", () => {
 
 describe("guessing a letter", () => {
   it("reveals every occurrence of a correct Guess", () => {
-    const game = guess(startGame("BANANA"), "a");
+    const game = guess(start("BANANA"), "a");
 
     expect(maskedWord(game)).toBe("_A_A_A");
   });
 
   it("ignores a letter that was already guessed", () => {
-    const once = guess(startGame("BANANA"), "a");
+    const once = guess(start("BANANA"), "a");
 
     const twice = guess(once, "a");
 
@@ -34,7 +36,7 @@ describe("guessing a letter", () => {
 
 describe("a Wrong Guess", () => {
   it("costs one Life", () => {
-    const game = guess(startGame("CAT"), "z");
+    const game = guess(start("CAT"), "z");
 
     expect(livesLeft(game)).toBe(5);
   });
@@ -42,7 +44,7 @@ describe("a Wrong Guess", () => {
 
 describe("a Game's end", () => {
   it("is won when every letter is revealed", () => {
-    let game = startGame("CAT");
+    let game = start("CAT");
     for (const letter of ["c", "a", "t"]) {
       game = guess(game, letter);
     }
@@ -52,7 +54,7 @@ describe("a Game's end", () => {
   });
 
   it("is lost when every Life is spent", () => {
-    let game = startGame("CAT");
+    let game = start("CAT");
     for (const letter of ["x", "y", "z", "p", "q", "r"]) {
       game = guess(game, letter);
     }
@@ -62,7 +64,7 @@ describe("a Game's end", () => {
   });
 
   it("ignores a Guess once it has ended", () => {
-    let game = startGame("CAT");
+    let game = start("CAT");
     for (const letter of ["c", "a", "t"]) {
       game = guess(game, letter);
     }

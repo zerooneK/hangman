@@ -13,26 +13,19 @@ import {
 import { WORD_LISTS } from "@/lib/word-lists";
 import { pickWord } from "@/lib/words";
 
-interface Round {
-  readonly game: Game;
-  readonly category: string;
-}
-
-function startRound(previousWord?: string): Round {
+function newGame(previousWord?: string): Game {
   const choice = pickWord(WORD_LISTS, Math.random, previousWord);
 
-  return { game: startGame(choice.word), category: choice.category };
+  return startGame(choice.word, choice.category);
 }
 
 export function HangmanGame() {
-  const [round, setRound] = useState<Round>(() => startRound());
+  const [game, setGame] = useState<Game>(() => newGame());
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (/^[a-z]$/i.test(event.key)) {
-        setRound(
-          (current) => current && { ...current, game: guess(current.game, event.key) },
-        );
+        setGame((current) => guess(current, event.key));
       }
     }
 
@@ -40,14 +33,13 @@ export function HangmanGame() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const { game, category } = round;
   const slots = maskedWord(game).split("");
   const isOver = game.status !== "playing";
 
   return (
     <>
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
-        คำใบ้: <span className="font-semibold">{category}</span>
+        คำใบ้: <span className="font-semibold">{game.category}</span>
       </p>
 
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
@@ -72,7 +64,7 @@ export function HangmanGame() {
           </p>
           <button
             type="button"
-            onClick={() => setRound((current) => startRound(current?.game.word))}
+            onClick={() => setGame(newGame(game.word))}
             className="rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-300"
           >
             เล่นอีกครั้ง
