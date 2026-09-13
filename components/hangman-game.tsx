@@ -37,9 +37,19 @@ export function HangmanGame() {
   const slots = maskedWord(game).split("");
   const isOver = game.status !== "playing";
   const spokenWord = slots.map((slot) => (slot === "_" ? "ว่าง" : slot)).join(" ");
+  const resultMessage =
+    game.status === "won"
+      ? "เก่งมาก! คุณชนะ"
+      : game.status === "lost"
+        ? "เสียใจด้วย คุณแพ้"
+        : "";
 
   return (
     <>
+      <p className="sr-only" role="status" aria-live="polite">
+        {resultMessage}
+      </p>
+
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
         คำใบ้: <span className="font-semibold">{game.category}</span>
       </p>
@@ -50,10 +60,8 @@ export function HangmanGame() {
 
       <HangmanFigure wrongGuesses={game.wrongGuesses} />
 
-      <p
-        aria-label={`คำที่ต้องทาย: ${spokenWord}`}
-        className="flex flex-wrap justify-center gap-2 font-mono text-3xl tracking-widest text-black sm:gap-3 sm:text-5xl dark:text-zinc-50"
-      >
+      <p className="flex flex-wrap justify-center gap-2 font-mono text-3xl tracking-widest text-black sm:gap-3 sm:text-5xl dark:text-zinc-50">
+        <span className="sr-only">คำที่ต้องทาย: {spokenWord}</span>
         {slots.map((slot, index) => (
           <span key={index} aria-hidden="true">
             {slot}
@@ -70,10 +78,10 @@ export function HangmanGame() {
       {isOver && (
         <div className="flex flex-col items-center gap-4">
           <p
-            role="status"
+            aria-hidden="true"
             className="text-2xl font-semibold text-black dark:text-zinc-50"
           >
-            {game.status === "won" ? "เก่งมาก! คุณชนะ" : "เสียใจด้วย คุณแพ้"}
+            {resultMessage}
           </p>
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
             คำคือ: <span className="font-semibold">{game.word}</span>

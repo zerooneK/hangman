@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.8.1] - 2026-09-13
+
+### Fixed
+
+- Screen readers can now read the letter slots: the description is real hidden text, because an `aria-label` on a plain paragraph is ignored.
+- The Win/Loss result now lives in a persistent live region so it is announced when it appears.
+
 ## [0.8.0] - 2026-09-13
 
 ### Added
