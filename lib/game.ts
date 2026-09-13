@@ -10,7 +10,7 @@ export interface Game {
 }
 
 export function startGame(word: string): Game {
-  return { word, guessed: [], wrongGuesses: 0, status: "playing" };
+  return { word: word.toUpperCase(), guessed: [], wrongGuesses: 0, status: "playing" };
 }
 
 export function maskedWord(game: Game): string {

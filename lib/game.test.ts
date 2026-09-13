@@ -7,6 +7,12 @@ describe("a new Game", () => {
 
     expect(maskedWord(game)).toBe("___");
   });
+
+  it("normalises the Word so any letter case can be guessed", () => {
+    const game = guess(startGame("cat"), "C");
+
+    expect(maskedWord(game)).toBe("C__");
+  });
 });
 
 describe("guessing a letter", () => {

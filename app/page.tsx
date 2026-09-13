@@ -51,7 +51,7 @@ export default function Home() {
             {game.status === "won" ? "เก่งมาก! คุณชนะ" : "เสียใจด้วย คุณแพ้"}
           </p>
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
-            คำตอบคือ: <span className="font-semibold">{game.word}</span>
+            คำคือ: <span className="font-semibold">{game.word}</span>
           </p>
           <button
             type="button"

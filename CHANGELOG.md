@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.4.1] - 2026-09-13
+
+### Fixed
+
+- Normalise the Word to uppercase so a lowercase Word can be guessed and won.
+- Rename the end-of-Game label from "คำตอบคือ" to "คำคือ" to match the glossary.
+
 ## [0.4.0] - 2026-09-13
 
 ### Added
