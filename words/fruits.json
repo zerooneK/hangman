@@ -1,4 +1,20 @@
 {
   "category": "ผลไม้",
-  "words": ["BANANA", "APPLE", "ORANGE", "MANGO", "CHERRY", "GRAPE", "PEACH", "MELON"]
+  "words": [
+    "BANANA",
+    "APPLE",
+    "ORANGE",
+    "MANGO",
+    "CHERRY",
+    "GRAPE",
+    "PEACH",
+    "MELON",
+    "PAPAYA",
+    "LEMON",
+    "LYCHEE",
+    "GUAVA",
+    "PLUM",
+    "KIWI",
+    "COCONUT"
+  ]
 }

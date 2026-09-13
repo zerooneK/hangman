@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.9.0] - 2026-09-13
+
+### Added
+
+- Expanded every Word List to 15 English words.
+- New "อาชีพ" (Occupations) Category with 15 words. There are now 5 Categories and 75 Words in total.
+
 ## [0.8.1] - 2026-09-13
 
 ### Fixed

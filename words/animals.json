@@ -1,4 +1,20 @@
 {
   "category": "สัตว์",
-  "words": ["ELEPHANT", "GIRAFFE", "PENGUIN", "TIGER", "DOLPHIN", "KANGAROO", "MONKEY", "RABBIT"]
+  "words": [
+    "ELEPHANT",
+    "GIRAFFE",
+    "PENGUIN",
+    "TIGER",
+    "DOLPHIN",
+    "KANGAROO",
+    "MONKEY",
+    "RABBIT",
+    "LION",
+    "ZEBRA",
+    "PANDA",
+    "WOLF",
+    "BEAR",
+    "SHARK",
+    "FALCON"
+  ]
 }
