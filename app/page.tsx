@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { HangmanFigure } from "@/components/hangman-figure";
 import {
   MAX_WRONG_GUESSES,
   guess,
@@ -38,6 +39,8 @@ export default function Home() {
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
         ชีวิตที่เหลือ: {livesLeft(game)} / {MAX_WRONG_GUESSES}
       </p>
+
+      <HangmanFigure wrongGuesses={game.wrongGuesses} />
 
       <p className="flex gap-3 font-mono text-5xl tracking-widest text-black dark:text-zinc-50">
         {slots.map((slot, index) => (

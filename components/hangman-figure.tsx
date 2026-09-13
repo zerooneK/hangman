@@ -1,0 +1,31 @@
+const DRAWING_PARTS = 6;
+
+const PARTS = [
+  <circle key="head" cx="140" cy="65" r="15" />,
+  <line key="body" x1="140" y1="80" x2="140" y2="140" />,
+  <line key="left-arm" x1="140" y1="95" x2="115" y2="120" />,
+  <line key="right-arm" x1="140" y1="95" x2="165" y2="120" />,
+  <line key="left-leg" x1="140" y1="140" x2="115" y2="180" />,
+  <line key="right-leg" x1="140" y1="140" x2="165" y2="180" />,
+];
+
+export function HangmanFigure({ wrongGuesses }: { wrongGuesses: number }) {
+  const shown = Math.min(Math.max(wrongGuesses, 0), DRAWING_PARTS);
+
+  return (
+    <svg
+      viewBox="0 0 200 220"
+      className="h-56 w-48 text-black dark:text-zinc-50"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="4"
+      strokeLinecap="round"
+    >
+      <line x1="20" y1="210" x2="180" y2="210" />
+      <line x1="50" y1="210" x2="50" y2="20" />
+      <line x1="50" y1="20" x2="140" y2="20" />
+      <line x1="140" y1="20" x2="140" y2="50" />
+      {PARTS.slice(0, shown)}
+    </svg>
+  );
+}

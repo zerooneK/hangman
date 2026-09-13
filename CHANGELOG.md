@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] - 2026-09-13
+
+### Added
+
+- A stick figure drawn one part per Wrong Guess (head, body, two arms, two legs), becoming complete at six, and resetting when a new Game starts.
+
 ## [0.4.1] - 2026-09-13
 
 ### Fixed
