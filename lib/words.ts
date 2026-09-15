@@ -24,16 +24,12 @@ export function pickWord(
       .map((word) => ({ category: list.category, word })),
   );
 
-  const fresh = choices.filter((choice) => choice.word !== previousWord);
-  const pool = fresh.length > 0 ? fresh : choices;
+  const withoutPrevious = choices.filter((choice) => choice.word !== previousWord);
+  const pool = withoutPrevious.length > 0 ? withoutPrevious : choices;
 
-  if (pool.length > 0) {
-    return pool[Math.floor(random() * pool.length)];
+  if (pool.length === 0) {
+    throw new Error("No Word in any Category fits this Difficulty");
   }
 
-  const anyWord = lists.flatMap((list) =>
-    list.words.map((word) => ({ category: list.category, word })),
-  );
-
-  return anyWord[Math.floor(random() * anyWord.length)];
+  return pool[Math.floor(random() * pool.length)];
 }

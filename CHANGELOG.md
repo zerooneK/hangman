@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.6] - 2026-09-13
+
+### Fixed
+
+- `pickWord` no longer returns a Word that breaks the Difficulty's length rule when no Word matches: it now throws instead.
+- Added a uniform-selection test for the middle of the pool.
+
+_(Part of ticket #10.)_
+
 ## [0.10.5] - 2026-09-13
 
 ### Added

@@ -48,6 +48,16 @@ describe("picking a Word for a Difficulty", () => {
     expect(choice.word).toBe("FIG");
   });
 
+  it("uses the injected random to pick from the middle of the pool", () => {
+    const threeShortWords: WordList[] = [
+      { category: "Animals", words: ["CAT", "DOG", "FIG"] },
+    ];
+
+    const choice = pickWord(threeShortWords, () => 0.5, easy);
+
+    expect(choice).toEqual({ category: "Animals", word: "DOG" });
+  });
+
   it("falls back to the previous Word when it is the only match", () => {
     const singleWordLists: WordList[] = [{ category: "Animals", words: ["CAT"] }];
 
@@ -56,11 +66,9 @@ describe("picking a Word for a Difficulty", () => {
     expect(choice).toEqual({ category: "Animals", word: "CAT" });
   });
 
-  it("falls back to any Word when the Difficulty has no matches at all", () => {
+  it("refuses a Difficulty that has no matching Words at all", () => {
     const longWordsOnly: WordList[] = [{ category: "Animals", words: ["ELEPHANT"] }];
 
-    const choice = pickWord(longWordsOnly, () => 0, easy);
-
-    expect(choice).toEqual({ category: "Animals", word: "ELEPHANT" });
+    expect(() => pickWord(longWordsOnly, () => 0, easy)).toThrow(Error);
   });
 });
