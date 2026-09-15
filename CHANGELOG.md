@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.12.0] - 2026-09-13
+
+### Added
+
+- After a Game ends, a "เปลี่ยนระดับความยาก" control returns to the Difficulty picker; picking a Difficulty starts a new Game with a new Word.
+- "เล่นอีกครั้ง" keeps the same Difficulty and avoids repeating the Word just played.
+
+_(Part of ticket #12.)_
+
 ## [0.11.1] - 2026-09-13
 
 ### Fixed

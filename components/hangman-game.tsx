@@ -13,6 +13,9 @@ type Screen = "start" | "select" | "playing";
 const BUTTON =
   "rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-zinc-300 dark:focus-visible:outline-white";
 
+const SECONDARY_BUTTON =
+  "rounded-full border border-zinc-300 px-6 py-3 font-medium text-black transition-colors hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-800 dark:focus-visible:outline-white";
+
 function newGame(difficulty: Difficulty, previousWord?: string): Game {
   const choice = pickWord(WORD_LISTS, Math.random, difficulty, previousWord);
 
@@ -39,9 +42,9 @@ export function HangmanGame() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  function start(chosen: Difficulty) {
+  function start(chosen: Difficulty, previousWord?: string) {
     setDifficulty(chosen);
-    setGame(newGame(chosen));
+    setGame(newGame(chosen, previousWord));
     setScreen("playing");
   }
 
@@ -69,7 +72,7 @@ export function HangmanGame() {
             <button
               key={option.id}
               type="button"
-              onClick={() => start(option)}
+              onClick={() => start(option, game ? game.word : undefined)}
               className="w-40 rounded-2xl border border-zinc-300 px-6 py-4 text-center transition-colors hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:outline-white"
             >
               <span className="block text-lg font-semibold text-black dark:text-zinc-50">
@@ -142,13 +145,22 @@ export function HangmanGame() {
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
             คำคือ: <span className="font-semibold">{game.word}</span>
           </p>
-          <button
-            type="button"
-            onClick={() => setGame(newGame(difficulty, game.word))}
-            className={BUTTON}
-          >
-            เล่นอีกครั้ง
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => setGame(newGame(difficulty, game.word))}
+              className={BUTTON}
+            >
+              เล่นอีกครั้ง
+            </button>
+            <button
+              type="button"
+              onClick={() => setScreen("select")}
+              className={SECONDARY_BUTTON}
+            >
+              เปลี่ยนระดับความยาก
+            </button>
+          </div>
         </div>
       )}
     </>
