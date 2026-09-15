@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.2] - 2026-09-13
+
+### Added
+
+- ADR 0003 recording the Difficulty-levels decision (Word length + Lives).
+- `CONTEXT.md` glossary: new **Difficulty** term; **Life** definition now depends on Difficulty.
+
 ## [0.10.1] - 2026-09-13
 
 ### Changed

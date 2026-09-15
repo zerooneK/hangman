@@ -1,0 +1,3 @@
+# Difficulty levels defined by Word length and Lives
+
+Games can be played at three Difficulties — Easy, Normal, Hard — that set both the number of Lives (8, 6, 4) and which Words may be picked: Easy takes Words of at most 5 letters, Hard at least 7, and Normal any Word. We picked Word length as the rule rather than tagging each Word with a Difficulty, so the existing Word data needs no changes and any future Word fits every level. A Difficulty is fixed for the whole Game and chosen on a start screen before play begins. The stick figure is drawn in proportion so that it is complete exactly when the last Life is spent, keeping "full figure means a Loss" true at every Difficulty. We avoided storing the player's last Difficulty, consistent with ADR-0002.
