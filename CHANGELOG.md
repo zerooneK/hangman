@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.12.1] - 2026-09-13
+
+### Fixed
+
+- "เล่นอีกครั้ง" now reuses the same new-Game path as the Difficulty picker.
+
+_(Part of ticket #12.)_
+
 ## [0.12.0] - 2026-09-13
 
 ### Added

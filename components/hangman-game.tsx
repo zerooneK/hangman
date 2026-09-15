@@ -148,7 +148,7 @@ export function HangmanGame() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={() => setGame(newGame(difficulty, game.word))}
+              onClick={() => start(difficulty, game.word)}
               className={BUTTON}
             >
               เล่นอีกครั้ง
