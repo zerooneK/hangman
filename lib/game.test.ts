@@ -95,26 +95,63 @@ describe("a Game's own Lives", () => {
     expect(game.status).toBe("lost");
     expect(livesLeft(game)).toBe(0);
   });
+
+  it("hits the loss boundary exactly at 6 and 8 Lives too", () => {
+    let six = start("CAT", 6);
+    for (const letter of ["x", "y", "z", "p", "q"]) {
+      six = guess(six, letter);
+    }
+
+    expect(six.status).toBe("playing");
+    six = guess(six, "r");
+    expect(six.status).toBe("lost");
+
+    let eight = start("CAT", 8);
+    for (const letter of ["x", "y", "z", "p", "q", "r", "w"]) {
+      eight = guess(eight, letter);
+    }
+
+    expect(eight.status).toBe("playing");
+    eight = guess(eight, "v");
+    expect(eight.status).toBe("lost");
+  });
 });
 
 describe("the stick figure parts", () => {
+  const withWrongGuesses = (lives: number, count: number) => {
+    const wrongLetters = ["x", "y", "z", "p", "q", "r", "w", "v", "u", "s"];
+    let game = start("CAT", lives);
+
+    for (let i = 0; i < count; i++) {
+      game = guess(game, wrongLetters[i]);
+    }
+
+    return game;
+  };
+
   it("shows no parts before the first Wrong Guess", () => {
-    expect(figurePartsShown(0, 8, 6)).toBe(0);
+    expect(figurePartsShown(withWrongGuesses(8, 0), 6)).toBe(0);
   });
 
   it("completes exactly at the last Life for every Difficulty", () => {
-    expect(figurePartsShown(8, 8, 6)).toBe(6);
-    expect(figurePartsShown(6, 6, 6)).toBe(6);
-    expect(figurePartsShown(4, 4, 6)).toBe(6);
+    expect(figurePartsShown(withWrongGuesses(8, 8), 6)).toBe(6);
+    expect(figurePartsShown(withWrongGuesses(6, 6), 6)).toBe(6);
+    expect(figurePartsShown(withWrongGuesses(4, 4), 6)).toBe(6);
+  });
+
+  it("is never complete before the last Life", () => {
+    expect(figurePartsShown(withWrongGuesses(8, 7), 6)).toBe(5);
+    expect(figurePartsShown(withWrongGuesses(6, 5), 6)).toBe(5);
+    expect(figurePartsShown(withWrongGuesses(4, 3), 6)).toBe(5);
   });
 
   it("grows in proportion to the Wrong Guesses", () => {
-    expect(figurePartsShown(1, 4, 6)).toBe(2);
-    expect(figurePartsShown(3, 6, 6)).toBe(3);
-    expect(figurePartsShown(6, 8, 6)).toBe(5);
+    expect(figurePartsShown(withWrongGuesses(4, 1), 6)).toBe(2);
+    expect(figurePartsShown(withWrongGuesses(6, 3), 6)).toBe(3);
+    expect(figurePartsShown(withWrongGuesses(8, 6), 6)).toBe(5);
   });
 
   it("never draws more parts than the figure has", () => {
-    expect(figurePartsShown(10, 8, 6)).toBe(6);
+    expect(figurePartsShown(withWrongGuesses(8, 10), 6)).toBe(6);
   });
 });

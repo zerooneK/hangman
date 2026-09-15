@@ -59,16 +59,12 @@ export function livesLeft(game: Game): number {
   return game.lives - game.wrongGuesses;
 }
 
-export function figurePartsShown(
-  wrongGuesses: number,
-  lives: number,
-  totalParts: number,
-): number {
-  if (lives <= 0 || totalParts <= 0) {
+export function figurePartsShown(game: Game, totalParts: number): number {
+  if (game.lives <= 0 || totalParts <= 0) {
     return 0;
   }
 
-  const proportion = Math.round((wrongGuesses * totalParts) / lives);
+  const proportion = Math.round((game.wrongGuesses * totalParts) / game.lives);
 
   return Math.min(Math.max(proportion, 0), totalParts);
 }

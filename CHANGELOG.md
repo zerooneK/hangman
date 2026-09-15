@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.4] - 2026-09-13
+
+### Fixed
+
+- Loss-boundary tests now cover 6 and 8 Lives, and figure scaling tests prove the figure is never complete before the last Life at every Difficulty.
+- `figurePartsShown` now takes the Game instead of separate numbers.
+
+_(Part of ticket #9.)_
+
 ## [0.10.3] - 2026-09-13
 
 ### Added
