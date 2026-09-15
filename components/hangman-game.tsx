@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 import { HangmanFigure } from "@/components/hangman-figure";
 import { LetterKeyboard } from "@/components/letter-keyboard";
-import { DIFFICULTIES, wordLengthLabel, type Difficulty } from "@/lib/difficulty";
-import { guess, livesLeft, maskedWord, startGame, type Game } from "@/lib/game";
+import { DIFFICULTIES, wordLengthLabel } from "@/lib/difficulty";
+import {
+  applyGuess,
+  beginGame,
+  initialFlow,
+  openPicker,
+  replay,
+  type Deps,
+} from "@/lib/game-flow";
+import { livesLeft, maskedWord } from "@/lib/game";
 import { WORD_LISTS } from "@/lib/word-lists";
-import { pickWord } from "@/lib/words";
 
-type Screen = "start" | "select" | "playing";
+const DEPS: Deps = { lists: WORD_LISTS, random: Math.random };
 
 const BUTTON =
   "rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-zinc-300 dark:focus-visible:outline-white";
@@ -16,25 +23,13 @@ const BUTTON =
 const SECONDARY_BUTTON =
   "rounded-full border border-zinc-300 px-6 py-3 font-medium text-black transition-colors hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-800 dark:focus-visible:outline-white";
 
-function newGame(difficulty: Difficulty, previousWord?: string): Game {
-  const choice = pickWord(WORD_LISTS, Math.random, difficulty, previousWord);
-
-  return startGame(choice.word, choice.category, difficulty.lives);
-}
-
-function applyGuess(game: Game | null, letter: string): Game | null {
-  return game ? guess(game, letter) : game;
-}
-
 export function HangmanGame() {
-  const [screen, setScreen] = useState<Screen>("start");
-  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
-  const [game, setGame] = useState<Game | null>(null);
+  const [flow, setFlow] = useState(initialFlow);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (/^[a-z]$/i.test(event.key)) {
-        setGame((current) => applyGuess(current, event.key));
+        setFlow((current) => applyGuess(current, event.key));
       }
     }
 
@@ -42,26 +37,20 @@ export function HangmanGame() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  function start(chosen: Difficulty, previousWord?: string) {
-    setDifficulty(chosen);
-    setGame(newGame(chosen, previousWord));
-    setScreen("playing");
-  }
-
-  if (screen === "start") {
+  if (flow.phase === "start") {
     return (
       <div className="flex flex-col items-center gap-6">
         <p className="max-w-md text-center text-lg text-zinc-600 dark:text-zinc-400">
           ทายคำภาษาอังกฤษทีละตัวอักษร มีคำใบ้เป็นหมวดหมู่
         </p>
-        <button type="button" onClick={() => setScreen("select")} className={BUTTON}>
+        <button type="button" onClick={() => setFlow(openPicker)} className={BUTTON}>
           เริ่มเกม
         </button>
       </div>
     );
   }
 
-  if (screen === "select") {
+  if (flow.phase === "select") {
     return (
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-xl font-semibold text-black dark:text-zinc-50">
@@ -72,7 +61,7 @@ export function HangmanGame() {
             <button
               key={option.id}
               type="button"
-              onClick={() => start(option, game ? game.word : undefined)}
+              onClick={() => setFlow((current) => beginGame(current, option, DEPS))}
               className="w-40 rounded-2xl border border-zinc-300 px-6 py-4 text-center transition-colors hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:outline-white"
             >
               <span className="block text-lg font-semibold text-black dark:text-zinc-50">
@@ -88,10 +77,7 @@ export function HangmanGame() {
     );
   }
 
-  if (!game || !difficulty) {
-    return null;
-  }
-
+  const { game, difficulty } = flow;
   const slots = maskedWord(game).split("");
   const isOver = game.status !== "playing";
   const spokenWord = slots.map((slot) => (slot === "_" ? "ว่าง" : slot)).join(" ");
@@ -131,7 +117,7 @@ export function HangmanGame() {
       <LetterKeyboard
         guessed={game.guessed}
         disabled={isOver}
-        onGuess={(letter) => setGame((current) => applyGuess(current, letter))}
+        onGuess={(letter) => setFlow((current) => applyGuess(current, letter))}
       />
 
       {isOver && (
@@ -148,14 +134,14 @@ export function HangmanGame() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={() => start(difficulty, game.word)}
+              onClick={() => setFlow((current) => replay(current, DEPS))}
               className={BUTTON}
             >
               เล่นอีกครั้ง
             </button>
             <button
               type="button"
-              onClick={() => setScreen("select")}
+              onClick={() => setFlow(openPicker)}
               className={SECONDARY_BUTTON}
             >
               เปลี่ยนระดับความยาก

@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.12.2] - 2026-09-13
+
+### Changed
+
+- The Game flow (start/select/playing screens, replay, change Difficulty, guessing) now lives in a pure `GameFlow` module with injected Word Lists and randomness; the view only holds the flow and renders by phase.
+
+_(Refactor #13.)_
+
 ## [0.12.1] - 2026-09-13
 
 ### Fixed
