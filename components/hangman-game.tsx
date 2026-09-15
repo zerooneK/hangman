@@ -3,31 +3,99 @@
 import { useEffect, useState } from "react";
 import { HangmanFigure } from "@/components/hangman-figure";
 import { LetterKeyboard } from "@/components/letter-keyboard";
-import { MAX_WRONG_GUESSES, guess, livesLeft, maskedWord, startGame, type Game } from "@/lib/game";
-import { DIFFICULTIES } from "@/lib/difficulty";
+import { DIFFICULTIES, type Difficulty } from "@/lib/difficulty";
+import { guess, livesLeft, maskedWord, startGame, type Game } from "@/lib/game";
 import { WORD_LISTS } from "@/lib/word-lists";
 import { pickWord } from "@/lib/words";
 
-function newGame(previousWord?: string): Game {
-  const normal = DIFFICULTIES.find((difficulty) => difficulty.id === "normal")!;
-  const choice = pickWord(WORD_LISTS, Math.random, normal, previousWord);
+type Screen = "start" | "select" | "playing";
 
-  return startGame(choice.word, choice.category, MAX_WRONG_GUESSES);
+const BUTTON =
+  "rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-zinc-300 dark:focus-visible:outline-white";
+
+function newGame(difficulty: Difficulty, previousWord?: string): Game {
+  const choice = pickWord(WORD_LISTS, Math.random, difficulty, previousWord);
+
+  return startGame(choice.word, choice.category, difficulty.lives);
+}
+
+function wordHint(difficulty: Difficulty): string {
+  if (difficulty.maxWordLength !== undefined) {
+    return `คำไม่เกิน ${difficulty.maxWordLength} ตัวอักษร`;
+  }
+
+  if (difficulty.minWordLength !== undefined) {
+    return `คำ ${difficulty.minWordLength} ตัวอักษรขึ้นไป`;
+  }
+
+  return "ทุกคำ";
 }
 
 export function HangmanGame() {
-  const [game, setGame] = useState<Game>(() => newGame());
+  const [screen, setScreen] = useState<Screen>("start");
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
+  const [game, setGame] = useState<Game | null>(null);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (/^[a-z]$/i.test(event.key)) {
-        setGame((current) => guess(current, event.key));
+        setGame((current) => (current ? guess(current, event.key) : current));
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  function start(difficulty: Difficulty) {
+    setDifficulty(difficulty);
+    setGame(newGame(difficulty));
+    setScreen("playing");
+  }
+
+  if (screen === "start") {
+    return (
+      <div className="flex flex-col items-center gap-6">
+        <p className="max-w-md text-center text-lg text-zinc-600 dark:text-zinc-400">
+          ทายคำภาษาอังกฤษทีละตัวอักษร มีคำใบ้เป็นหมวดหมู่
+        </p>
+        <button type="button" onClick={() => setScreen("select")} className={BUTTON}>
+          เริ่มเกม
+        </button>
+      </div>
+    );
+  }
+
+  if (screen === "select") {
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <h2 className="text-xl font-semibold text-black dark:text-zinc-50">
+          เลือกระดับความยาก
+        </h2>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {DIFFICULTIES.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => start(option)}
+              className="w-40 rounded-2xl border border-zinc-300 px-6 py-4 text-center transition-colors hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:outline-white"
+            >
+              <span className="block text-lg font-semibold text-black dark:text-zinc-50">
+                {option.label}
+              </span>
+              <span className="block text-sm text-zinc-600 dark:text-zinc-400">
+                {wordHint(option)} · {option.lives} ชีวิต
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!game || !difficulty) {
+    return null;
+  }
 
   const slots = maskedWord(game).split("");
   const isOver = game.status !== "playing";
@@ -46,14 +114,15 @@ export function HangmanGame() {
       </p>
 
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
-        คำใบ้: <span className="font-semibold">{game.category}</span>
+        ระดับ: <span className="font-semibold">{difficulty.label}</span> · คำใบ้:{" "}
+        <span className="font-semibold">{game.category}</span>
       </p>
 
       <p className="text-lg text-zinc-600 dark:text-zinc-400">
-        ชีวิตที่เหลือ: {livesLeft(game)} / {MAX_WRONG_GUESSES}
+        ชีวิตที่เหลือ: {livesLeft(game)} / {game.lives}
       </p>
 
-      <HangmanFigure wrongGuesses={game.wrongGuesses} />
+      <HangmanFigure game={game} />
 
       <p className="flex flex-wrap justify-center gap-2 font-mono text-3xl tracking-widest text-black sm:gap-3 sm:text-5xl dark:text-zinc-50">
         <span className="sr-only">คำที่ต้องทาย: {spokenWord}</span>
@@ -67,7 +136,7 @@ export function HangmanGame() {
       <LetterKeyboard
         guessed={game.guessed}
         disabled={isOver}
-        onGuess={(letter) => setGame((current) => guess(current, letter))}
+        onGuess={(letter) => setGame((current) => (current ? guess(current, letter) : current))}
       />
 
       {isOver && (
@@ -83,8 +152,8 @@ export function HangmanGame() {
           </p>
           <button
             type="button"
-            onClick={() => setGame(newGame(game.word))}
-            className="rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-zinc-300 dark:focus-visible:outline-white"
+            onClick={() => setGame(newGame(difficulty, game.word))}
+            className={BUTTON}
           >
             เล่นอีกครั้ง
           </button>

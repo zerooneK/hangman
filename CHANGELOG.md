@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.11.0] - 2026-09-13
+
+### Added
+
+- A start screen with a "เริ่มเกม" button, then a Difficulty picker (ง่าย/ปกติ/ยาก) before each Game.
+- Games now start with the chosen Difficulty's Lives; the Lives display and the stick figure follow that Difficulty, and the active Difficulty shows during play.
+
+_(Part of ticket #11.)_
+
 ## [0.10.6] - 2026-09-13
 
 ### Fixed
