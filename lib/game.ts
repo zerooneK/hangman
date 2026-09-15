@@ -5,15 +5,17 @@ export const MAX_WRONG_GUESSES = 6;
 export interface Game {
   readonly word: string;
   readonly category: string;
+  readonly lives: number;
   readonly guessed: readonly string[];
   readonly wrongGuesses: number;
   readonly status: GameStatus;
 }
 
-export function startGame(word: string, category: string): Game {
+export function startGame(word: string, category: string, lives: number): Game {
   return {
     word: word.toUpperCase(),
     category,
+    lives,
     guessed: [],
     wrongGuesses: 0,
     status: "playing",
@@ -46,12 +48,27 @@ export function guess(game: Game, letter: string): Game {
   return {
     word: game.word,
     category: game.category,
+    lives: game.lives,
     guessed,
     wrongGuesses,
-    status: revealed ? "won" : wrongGuesses >= MAX_WRONG_GUESSES ? "lost" : "playing",
+    status: revealed ? "won" : wrongGuesses >= game.lives ? "lost" : "playing",
   };
 }
 
 export function livesLeft(game: Game): number {
-  return MAX_WRONG_GUESSES - game.wrongGuesses;
+  return game.lives - game.wrongGuesses;
+}
+
+export function figurePartsShown(
+  wrongGuesses: number,
+  lives: number,
+  totalParts: number,
+): number {
+  if (lives <= 0 || totalParts <= 0) {
+    return 0;
+  }
+
+  const proportion = Math.round((wrongGuesses * totalParts) / lives);
+
+  return Math.min(Math.max(proportion, 0), totalParts);
 }

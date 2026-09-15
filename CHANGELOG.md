@@ -4,6 +4,16 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.3] - 2026-09-13
+
+### Added
+
+- Difficulty domain data (Easy/Normal/Hard with Lives 8/6/4 and Word-length rules) with unit tests.
+- Games now carry their own Lives and are Lost when those run out; remaining Lives derive from the Game.
+- A stick-figure scaling helper that draws the figure complete exactly at the last Life.
+
+_(Part of ticket #9.)_
+
 ## [0.10.2] - 2026-09-13
 
 ### Added

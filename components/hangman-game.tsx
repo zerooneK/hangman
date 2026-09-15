@@ -17,7 +17,7 @@ import { pickWord } from "@/lib/words";
 function newGame(previousWord?: string): Game {
   const choice = pickWord(WORD_LISTS, Math.random, previousWord);
 
-  return startGame(choice.word, choice.category);
+  return startGame(choice.word, choice.category, MAX_WRONG_GUESSES);
 }
 
 export function HangmanGame() {
