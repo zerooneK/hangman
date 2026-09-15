@@ -7,6 +7,7 @@ import {
   openPicker,
   replay,
   type Deps,
+  type GameFlow,
 } from "./game-flow";
 import { livesLeft, maskedWord } from "./game";
 import type { WordList } from "./words";
@@ -16,6 +17,24 @@ const normal = DIFFICULTIES.find((difficulty) => difficulty.id === "normal")!;
 
 const LISTS: WordList[] = [{ category: "Animals", words: ["CAT", "DOG"] }];
 const deps = (random = () => 0): Deps => ({ lists: LISTS, random });
+
+function playing(flow: GameFlow): Extract<GameFlow, { phase: "playing" }> {
+  if (flow.phase !== "playing") {
+    throw new Error("expected a playing flow");
+  }
+
+  return flow;
+}
+
+function finished(difficulty = normal): GameFlow {
+  let game = beginGame(openPicker(initialFlow), difficulty, deps());
+
+  for (const letter of ["z", "y", "x", "w", "v", "u", "s", "r"]) {
+    game = applyGuess(game, letter);
+  }
+
+  return game;
+}
 
 describe("a fresh flow", () => {
   it("starts on the start screen", () => {
@@ -29,18 +48,22 @@ describe("opening the Difficulty picker", () => {
   });
 
   it("remembers the Word just played when leaving a Game", () => {
-    const playing = beginGame(openPicker(initialFlow), normal, deps());
+    const game = beginGame(openPicker(initialFlow), normal, deps());
 
-    expect(openPicker(playing)).toEqual({ phase: "select", previousWord: "CAT" });
+    expect(openPicker(game)).toEqual({ phase: "select", previousWord: "CAT" });
+  });
+
+  it("keeps an already chosen previous Word", () => {
+    const select = { phase: "select" as const, previousWord: "DOG" };
+
+    expect(openPicker(select)).toEqual(select);
   });
 });
 
 describe("beginning a Game", () => {
   it("starts with the Difficulty's Lives", () => {
-    const flow = beginGame(openPicker(initialFlow), easy, deps());
+    const flow = playing(beginGame(openPicker(initialFlow), easy, deps()));
 
-    expect(flow.phase).toBe("playing");
-    if (flow.phase !== "playing") return;
     expect(flow.difficulty.id).toBe("easy");
     expect(livesLeft(flow.game)).toBe(8);
   });
@@ -48,11 +71,11 @@ describe("beginning a Game", () => {
   it("avoids the previous Word", () => {
     const select = { phase: "select" as const, previousWord: "CAT" };
 
-    const flow = beginGame(select, normal, deps());
+    expect(playing(beginGame(select, normal, deps())).game.word).toBe("DOG");
+  });
 
-    expect(flow.phase).toBe("playing");
-    if (flow.phase !== "playing") return;
-    expect(flow.game.word).toBe("DOG");
+  it("is a no-op outside the picker", () => {
+    expect(beginGame(initialFlow, normal, deps())).toEqual(initialFlow);
   });
 });
 
@@ -68,34 +91,29 @@ describe("guessing outside a Game", () => {
   });
 
   it("reveals letters while playing", () => {
-    const flow = beginGame(openPicker(initialFlow), normal, deps());
+    const flow = playing(beginGame(openPicker(initialFlow), normal, deps()));
 
-    const next = applyGuess(flow, "A");
-
-    expect(next.phase).toBe("playing");
-    if (next.phase !== "playing") return;
-    expect(maskedWord(next.game)).toBe("_A_");
+    expect(maskedWord(playing(applyGuess(flow, "A")).game)).toBe("_A_");
   });
 });
 
 describe("replaying", () => {
   it("keeps the same Difficulty", () => {
-    const flow = beginGame(openPicker(initialFlow), easy, deps());
+    const flow = finished(easy);
 
-    const next = replay(flow, deps());
-
-    expect(next.phase).toBe("playing");
-    if (next.phase !== "playing") return;
-    expect(next.difficulty.id).toBe("easy");
+    expect(playing(replay(flow, deps())).difficulty.id).toBe("easy");
   });
 
   it("avoids the Word just played", () => {
+    const flow = finished(normal);
+
+    expect(playing(replay(flow, deps())).game.word).toBe("DOG");
+  });
+
+  it("is a no-op while the Game is still playing", () => {
     const flow = beginGame(openPicker(initialFlow), normal, deps());
 
-    const next = replay(flow, deps());
-
-    if (next.phase !== "playing") throw new Error("expected a playing flow");
-    expect(next.game.word).toBe("DOG");
+    expect(replay(flow, deps())).toEqual(flow);
   });
 
   it("is a no-op outside a Game", () => {

@@ -14,16 +14,7 @@ export interface Deps {
   readonly random: Random;
 }
 
-export function openPicker(flow: GameFlow): GameFlow {
-  if (flow.phase === "playing") {
-    return { phase: "select", previousWord: flow.game.word };
-  }
-
-  return { phase: "select" };
-}
-
-export function beginGame(flow: GameFlow, difficulty: Difficulty, deps: Deps): GameFlow {
-  const previousWord = flow.phase === "select" ? flow.previousWord : undefined;
+function startPlaying(difficulty: Difficulty, previousWord: string | undefined, deps: Deps): GameFlow {
   const choice = pickWord(deps.lists, deps.random, difficulty, previousWord);
 
   return {
@@ -33,18 +24,32 @@ export function beginGame(flow: GameFlow, difficulty: Difficulty, deps: Deps): G
   };
 }
 
-export function replay(flow: GameFlow, deps: Deps): GameFlow {
-  if (flow.phase !== "playing") {
+export function openPicker(flow: GameFlow): GameFlow {
+  if (flow.phase === "select") {
     return flow;
   }
 
-  const choice = pickWord(deps.lists, deps.random, flow.difficulty, flow.game.word);
+  if (flow.phase === "playing") {
+    return { phase: "select", previousWord: flow.game.word };
+  }
 
-  return {
-    phase: "playing",
-    difficulty: flow.difficulty,
-    game: startGame(choice.word, choice.category, flow.difficulty.lives),
-  };
+  return { phase: "select" };
+}
+
+export function beginGame(flow: GameFlow, difficulty: Difficulty, deps: Deps): GameFlow {
+  if (flow.phase !== "select") {
+    return flow;
+  }
+
+  return startPlaying(difficulty, flow.previousWord, deps);
+}
+
+export function replay(flow: GameFlow, deps: Deps): GameFlow {
+  if (flow.phase !== "playing" || flow.game.status === "playing") {
+    return flow;
+  }
+
+  return startPlaying(flow.difficulty, flow.game.word, deps);
 }
 
 export function applyGuess(flow: GameFlow, letter: string): GameFlow {

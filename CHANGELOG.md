@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.12.3] - 2026-09-13
+
+### Fixed
+
+- `replay` is now a no-op unless the Game has finished, and `beginGame` only starts a Game from the picker; `openPicker` is idempotent on the picker.
+- Folded the duplicated new-Game path into one helper.
+
+_(Part of refactor #13.)_
+
 ## [0.12.2] - 2026-09-13
 
 ### Changed
