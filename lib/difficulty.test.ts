@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DIFFICULTIES, wordFits } from "./difficulty";
+import { DIFFICULTIES, wordFits, wordLengthLabel } from "./difficulty";
 
 const easy = DIFFICULTIES.find((difficulty) => difficulty.id === "easy")!;
 const normal = DIFFICULTIES.find((difficulty) => difficulty.id === "normal")!;
@@ -38,5 +38,13 @@ describe("fitting a Word to a Difficulty by length", () => {
     expect(wordFits(hard, "FALCON")).toBe(false);
     expect(wordFits(hard, "ELEPHANT")).toBe(true);
     expect(wordFits(hard, "THAILAND")).toBe(true);
+  });
+});
+
+describe("describing a Difficulty's Word length", () => {
+  it("names the length rule in plain words", () => {
+    expect(wordLengthLabel(easy)).toBe("คำไม่เกิน 5 ตัวอักษร");
+    expect(wordLengthLabel(normal)).toBe("ทุกคำ");
+    expect(wordLengthLabel(hard)).toBe("คำ 7 ตัวอักษรขึ้นไป");
   });
 });

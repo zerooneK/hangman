@@ -27,3 +27,15 @@ export function wordFits(difficulty: Difficulty, word: string): boolean {
 
   return true;
 }
+
+export function wordLengthLabel(difficulty: Difficulty): string {
+  if (difficulty.maxWordLength !== undefined) {
+    return `คำไม่เกิน ${difficulty.maxWordLength} ตัวอักษร`;
+  }
+
+  if (difficulty.minWordLength !== undefined) {
+    return `คำ ${difficulty.minWordLength} ตัวอักษรขึ้นไป`;
+  }
+
+  return "ทุกคำ";
+}

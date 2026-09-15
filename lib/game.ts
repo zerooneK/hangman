@@ -1,7 +1,5 @@
 export type GameStatus = "playing" | "won" | "lost";
 
-export const MAX_WRONG_GUESSES = 6;
-
 export interface Game {
   readonly word: string;
   readonly category: string;

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { HangmanFigure } from "@/components/hangman-figure";
 import { LetterKeyboard } from "@/components/letter-keyboard";
-import { DIFFICULTIES, type Difficulty } from "@/lib/difficulty";
+import { DIFFICULTIES, wordLengthLabel, type Difficulty } from "@/lib/difficulty";
 import { guess, livesLeft, maskedWord, startGame, type Game } from "@/lib/game";
 import { WORD_LISTS } from "@/lib/word-lists";
 import { pickWord } from "@/lib/words";
@@ -19,16 +19,8 @@ function newGame(difficulty: Difficulty, previousWord?: string): Game {
   return startGame(choice.word, choice.category, difficulty.lives);
 }
 
-function wordHint(difficulty: Difficulty): string {
-  if (difficulty.maxWordLength !== undefined) {
-    return `คำไม่เกิน ${difficulty.maxWordLength} ตัวอักษร`;
-  }
-
-  if (difficulty.minWordLength !== undefined) {
-    return `คำ ${difficulty.minWordLength} ตัวอักษรขึ้นไป`;
-  }
-
-  return "ทุกคำ";
+function applyGuess(game: Game | null, letter: string): Game | null {
+  return game ? guess(game, letter) : game;
 }
 
 export function HangmanGame() {
@@ -39,7 +31,7 @@ export function HangmanGame() {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (/^[a-z]$/i.test(event.key)) {
-        setGame((current) => (current ? guess(current, event.key) : current));
+        setGame((current) => applyGuess(current, event.key));
       }
     }
 
@@ -47,9 +39,9 @@ export function HangmanGame() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  function start(difficulty: Difficulty) {
-    setDifficulty(difficulty);
-    setGame(newGame(difficulty));
+  function start(chosen: Difficulty) {
+    setDifficulty(chosen);
+    setGame(newGame(chosen));
     setScreen("playing");
   }
 
@@ -84,7 +76,7 @@ export function HangmanGame() {
                 {option.label}
               </span>
               <span className="block text-sm text-zinc-600 dark:text-zinc-400">
-                {wordHint(option)} · {option.lives} ชีวิต
+                {wordLengthLabel(option)} · {option.lives} ชีวิต
               </span>
             </button>
           ))}
@@ -136,7 +128,7 @@ export function HangmanGame() {
       <LetterKeyboard
         guessed={game.guessed}
         disabled={isOver}
-        onGuess={(letter) => setGame((current) => (current ? guess(current, letter) : current))}
+        onGuess={(letter) => setGame((current) => applyGuess(current, letter))}
       />
 
       {isOver && (

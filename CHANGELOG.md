@@ -4,6 +4,16 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.11.1] - 2026-09-13
+
+### Fixed
+
+- Removed the unused `MAX_WRONG_GUESSES` constant.
+- Moved the Difficulty word-length wording into the domain module and covered it with a test.
+- Removed a duplicated guess guard in the game component.
+
+_(Part of ticket #11.)_
+
 ## [0.11.0] - 2026-09-13
 
 ### Added
