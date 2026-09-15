@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.5] - 2026-09-13
+
+### Added
+
+- Word picking is now Difficulty-aware: it collects Words from every Category, keeps those matching the Difficulty's length rule, and picks uniformly; the chosen Word's own Category is the hint.
+
+_(Part of ticket #10.)_
+
 ## [0.10.4] - 2026-09-13
 
 ### Fixed

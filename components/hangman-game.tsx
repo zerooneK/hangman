@@ -3,19 +3,14 @@
 import { useEffect, useState } from "react";
 import { HangmanFigure } from "@/components/hangman-figure";
 import { LetterKeyboard } from "@/components/letter-keyboard";
-import {
-  MAX_WRONG_GUESSES,
-  guess,
-  livesLeft,
-  maskedWord,
-  startGame,
-  type Game,
-} from "@/lib/game";
+import { MAX_WRONG_GUESSES, guess, livesLeft, maskedWord, startGame, type Game } from "@/lib/game";
+import { DIFFICULTIES } from "@/lib/difficulty";
 import { WORD_LISTS } from "@/lib/word-lists";
 import { pickWord } from "@/lib/words";
 
 function newGame(previousWord?: string): Game {
-  const choice = pickWord(WORD_LISTS, Math.random, previousWord);
+  const normal = DIFFICULTIES.find((difficulty) => difficulty.id === "normal")!;
+  const choice = pickWord(WORD_LISTS, Math.random, normal, previousWord);
 
   return startGame(choice.word, choice.category, MAX_WRONG_GUESSES);
 }

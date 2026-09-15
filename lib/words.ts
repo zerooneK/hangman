@@ -1,3 +1,5 @@
+import { wordFits, type Difficulty } from "./difficulty";
+
 export interface WordList {
   readonly category: string;
   readonly words: readonly string[];
@@ -13,26 +15,25 @@ export type Random = () => number;
 export function pickWord(
   lists: readonly WordList[],
   random: Random,
+  difficulty: Difficulty,
   previousWord?: string,
 ): WordChoice {
-  const list = lists[Math.floor(random() * lists.length)];
-  const candidates = list.words.filter((word) => word !== previousWord);
+  const choices = lists.flatMap((list) =>
+    list.words
+      .filter((word) => wordFits(difficulty, word))
+      .map((word) => ({ category: list.category, word })),
+  );
 
-  if (candidates.length > 0) {
-    const word = candidates[Math.floor(random() * candidates.length)];
+  const fresh = choices.filter((choice) => choice.word !== previousWord);
+  const pool = fresh.length > 0 ? fresh : choices;
 
-    return { category: list.category, word };
+  if (pool.length > 0) {
+    return pool[Math.floor(random() * pool.length)];
   }
 
-  const alternatives = lists
-    .flatMap((other) => other.words.map((word) => ({ category: other.category, word })))
-    .filter((choice) => choice.word !== previousWord);
+  const anyWord = lists.flatMap((list) =>
+    list.words.map((word) => ({ category: list.category, word })),
+  );
 
-  if (alternatives.length > 0) {
-    return alternatives[Math.floor(random() * alternatives.length)];
-  }
-
-  const word = list.words[Math.floor(random() * list.words.length)];
-
-  return { category: list.category, word };
+  return anyWord[Math.floor(random() * anyWord.length)];
 }
